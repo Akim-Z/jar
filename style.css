@@ -144,3 +144,30 @@ body {
 .theme-5 h2 { color: #ff3b30; }
 .theme-6 h2 { color: #5ac8fa; }
 .theme-7 h2 { color: #e5c07b; }
+
+.exploding-heart {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2000;
+    font-size: 20px;
+    user-select: none;
+    will-change: transform, opacity;
+    animation: heart-explosion 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes heart-explosion {
+    0% {
+        transform: translate(var(--x), var(--y)) scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    15% {
+        opacity: 1;
+        transform: translate(var(--x), var(--y)) scale(1.2) rotate(var(--r));
+    }
+    100% {
+        transform: translate(calc(var(--x) + var(--dx)), calc(var(--y) + var(--dy))) scale(var(--s)) rotate(calc(var(--r) * 2));
+        opacity: 0;
+    }
+}

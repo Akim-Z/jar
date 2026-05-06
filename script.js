@@ -164,10 +164,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
+    function createHeartExplosion(x, y) {
+        const heartEmojis = ['❤️', '💖', '💕', '💗', '💓', '🌸', '✨'];
+        const count = 30;
+
+        for (let i = 0; i < count; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'exploding-heart';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 150;
+            const dx = Math.cos(angle) * distance;
+            const dy = Math.sin(angle) * distance;
+            const scale = 0.5 + Math.random() * 1.5;
+            const rotation = (Math.random() - 0.5) * 100;
+
+            heart.style.setProperty('--x', `${x}px`);
+            heart.style.setProperty('--y', `${y}px`);
+            heart.style.setProperty('--dx', `${dx}px`);
+            heart.style.setProperty('--dy', `${dy}px`);
+            heart.style.setProperty('--s', scale);
+            heart.style.setProperty('--r', `${rotation}deg`);
+            heart.style.animationDuration = `${0.85 + Math.random() * 0.85}s`;
+
+            document.body.appendChild(heart);
+            heart.addEventListener('animationend', () => heart.remove());
+        }
+    }
+
     function onMouseClick(event) {
         if (isModalOpen) return;
         const clientX = event.clientX || (event.touches && event.touches[0].clientX);
         const clientY = event.clientY || (event.touches && event.touches[0].clientY);
+
+        createHeartExplosion(clientX, clientY);
+
         mouse.x = (clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(clientY / window.innerHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
