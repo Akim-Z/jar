@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>For You ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalWindow">
+            <div class="close-btn" id="closeBtn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div class="modal-content">
+                <h2 id="modalTitle"></h2>
+                <p id="modalText"></p>
+            </div>
+            <div class="floating-heart heart-1" id="heart1">💖</div>
+            <div class="floating-heart heart-2" id="heart2">💕</div>
+            <div class="floating-heart heart-3" id="heart3">❤️</div>
+            <div class="floating-heart heart-4" id="heart4">✨</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

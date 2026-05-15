@@ -1,173 +1,443 @@
+:root {
+    --bg-deep: #050510;
+    --bg-mid: #0B0B20;
+    --bg-light: #161635;
+    
+    --brand-pink: #FF8BA7;
+    --brand-peach: #FFC2A6;
+    --brand-gold: #F9D423;
+    
+    --glass-surface: rgba(30, 30, 50, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.25);
+    
+    /* Apple Spring Animation Curves */
+    --spring-soft: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    --spring-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    
+    /* iOS Safe Areas */
+    --safe-top: env(safe-area-inset-top, 20px);
+    --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
 
-body {
+body, html {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 100%, var(--bg-light), var(--bg-mid) 40%, var(--bg-deep) 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    color: #FFF;
+}
+
+/* Cinematic Noise Overlay */
+.noise-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+/* Parallax Layers */
+#parallax-bg-far, #parallax-bg-mid, #parallax-bg-near {
+    position: absolute;
+    inset: -15%;
+    width: 130%;
+    height: 130%;
+    z-index: 0;
+    will-change: transform;
+    transition: transform 0.2s var(--ease-out-expo);
+}
+
+.bg-star {
+    position: absolute;
+    border-radius: 50%;
+    background: #FFF;
+}
+
+.layer-far { opacity: 0.3; filter: blur(1.5px); }
+.layer-mid { opacity: 0.6; filter: blur(0.5px); }
+.layer-near { opacity: 0.9; filter: drop-shadow(0 0 4px #FFF); }
+
+/* Floating Heart Vessel */
+.jar-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ffe2e2 100%);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    z-index: 999;
+    transition: all 1.2s var(--spring-soft);
+    perspective: 1000px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)) drop-shadow(0 0 2px rgba(255,255,255,0.7));
+}
+
+.jar-container.blurred {
+    filter: blur(25px) saturate(1.5);
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(0.85);
+}
+
+.jar-body {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.5) 100%);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    mask-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><path d='M 100 185 C 100 185 10 115 10 55 C 10 20 40 5 65 5 C 80 5 95 15 100 25 C 105 15 120 5 135 5 C 160 5 190 20 190 55 C 190 115 100 185 100 185 Z' fill='black'/></svg>");
+    mask-size: 100% 100%;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><path d='M 100 185 C 100 185 10 115 10 55 C 10 20 40 5 65 5 C 80 5 95 15 100 25 C 105 15 120 5 135 5 C 160 5 190 20 190 55 C 190 115 100 185 100 185 Z' fill='black'/></svg>");
+    -webkit-mask-size: 100% 100%;
+    position: relative;
     overflow: hidden;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    z-index: 100;
 }
 
-#canvas-container {
+.jar-body::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    touch-action: none;
+    inset: 0;
+    box-shadow: 
+        inset 0 0 60px rgba(0, 0, 0, 0.9), 
+        inset 0 0 15px rgba(0, 0, 0, 0.8),
+        inset 4px 4px 20px rgba(255, 255, 255, 0.6), 
+        inset -4px -4px 25px rgba(255, 255, 255, 0.15);
+    pointer-events: none;
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+.jar-inner-light {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, var(--brand-peach) 0%, var(--brand-pink) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(25px);
+    opacity: 0.85;
+    animation: premiumPulse 4s var(--spring-soft) infinite alternate;
+    mix-blend-mode: screen;
+    transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease;
+}
+
+.jar-inner-light.active {
+    opacity: 1;
+    animation: premiumPulseActive 2s var(--spring-soft) infinite alternate;
+}
+
+@keyframes premiumPulse {
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; filter: blur(25px) brightness(1); }
+    100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; filter: blur(35px) brightness(1.2); }
+}
+
+@keyframes premiumPulseActive {
+    0% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; filter: blur(30px) brightness(1.3); }
+    100% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; filter: blur(45px) brightness(1.6); }
+}
+
+/* Constellation Container - one level below jar */
+#constellation-container {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    transition: transform 1.2s var(--spring-bouncy);
+}
+
+.interactive-star {
+    position: absolute;
+    width: 16px; height: 16px;
+    background: #FFF;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 
+        0 0 15px var(--brand-gold), 
+        0 0 40px var(--brand-pink),
+        inset 0 0 4px #FFF;
+    transform: translate(-50%, -50%);
+    transition: all 0.4s var(--spring-soft);
+    animation: starBreathing 3s ease-in-out infinite alternate;
+}
+
+.interactive-star::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 300%; height: 300%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.interactive-star:hover {
+    transform: translate(-50%, -50%) scale(1.6);
+    box-shadow: 
+        0 0 25px #FFF, 
+        0 0 60px var(--brand-pink);
+}
+
+@keyframes starBreathing {
+    0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.9); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Modal System (Flower Shape) */
+#modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 16, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 2000;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 100;
+    transition: opacity 0.6s var(--ease-out-expo);
 }
 
-.modal-overlay.active {
+#modal-overlay.active {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: all;
 }
 
-.modal {
+.modal-svg-wrapper {
     position: relative;
-    width: 90%;
-    max-width: 360px;
-    background: rgba(255, 255, 255, 0.75);
-    border-radius: 32px;
-    padding: 36px 28px;
-    text-align: center;
-    transform: scale(0.95) translateY(20px);
-    opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.1), opacity 0.4s ease, background 0.4s ease;
-    backdrop-filter: blur(30px) saturate(150%);
-    -webkit-backdrop-filter: blur(30px) saturate(150%);
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        inset 0 1px 1px rgba(255, 255, 255, 0.8),
-        inset 0 0 20px rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    width: 340px;
+    height: 400px;
+    transform: scale(0.85) translateY(40px);
+    transition: transform 0.8s var(--spring-bouncy);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.modal-overlay.active .modal {
+#modal-overlay.active .modal-svg-wrapper {
     transform: scale(1) translateY(0);
-    opacity: 1;
 }
 
-.modal-content h2 {
-    margin: 0 0 12px 0;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    transition: color 0.4s ease;
+/* We style the SVG to be absolute background */
+.modal-svg-wrapper > svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.6));
 }
 
-.modal-content p {
-    margin: 0;
-    font-size: 17px;
-    line-height: 1.4;
-    color: #3c3c43;
-    font-weight: 400;
-    transition: color 0.4s ease;
+.flower-glass-bg {
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
 }
 
+#modal-body {
+    position: relative;
+    z-index: 10;
+    width: 280px;
+    height: 320px;
+    /* Clip content to the flower shape conceptually, or just pad it so it fits inside */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    text-align: center;
+}
+
+/* Close Button Premium */
 .close-btn {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 30px;
-    height: 30px;
-    background: rgba(142, 142, 147, 0.15);
-    border-radius: 15px;
+    top: calc(var(--safe-top) + 10px);
+    right: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: #8e8e93;
-    transition: background 0.2s, color 0.2s, transform 0.1s;
-    z-index: 10;
+    z-index: 110;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.close-btn:active {
-    transform: scale(0.9);
-    background: rgba(142, 142, 147, 0.3);
+.close-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.1);
 }
 
-.close-btn svg {
-    pointer-events: none;
+/* Memory Type */
+.memory-card {
+    width: 100%;
+}
+.memory-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.memory-card p {
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    margin: 0;
 }
 
-.floating-heart {
+/* Breathing Type */
+.breathing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.breathing-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-pink), var(--brand-peach));
+    box-shadow: 
+        0 0 30px var(--brand-pink),
+        inset 0 0 10px rgba(255,255,255,0.5);
+    animation: premiumBreathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    margin-bottom: 50px;
+}
+.breathing-text {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: opacity 0.5s ease;
+}
+.breathing-sub {
+    font-size: 14px;
+    opacity: 0.6;
+    margin-top: 12px;
+}
+@keyframes premiumBreathe {
+    0% { transform: scale(1); filter: brightness(1); }
+    40% { transform: scale(2.8); filter: brightness(1.2); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Voice Type */
+.voice-card {
+    width: 100%;
+}
+.voice-card p {
+    font-size: 19px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+audio {
+    width: 100%;
+    height: 48px;
+    border-radius: 24px;
+    outline: none;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+audio::-webkit-media-controls-panel {
+    background: rgba(255,255,255,0.85);
+}
+
+/* Placeholder Type & Snake Animation */
+.placeholder-heart {
+    font-size: 70px;
+    animation: heartBeat 1.5s var(--spring-soft) infinite alternate;
+    filter: drop-shadow(0 0 20px var(--brand-pink));
+    margin-bottom: 20px;
+}
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
+}
+
+.snake.hidden {
+    display: none;
+}
+.snake.active {
+    display: block;
+    stroke-dasharray: 100 1300;
+    stroke-linecap: round;
+    animation: elegantSnake 6s linear infinite;
+}
+
+@keyframes elegantSnake {
+    from { stroke-dashoffset: 1400; }
+    to { stroke-dashoffset: 0; }
+}
+
+#constellation-lines {
     position: absolute;
-    user-select: none;
-    z-index: -1;
-    animation: pulse 2s infinite alternate;
-    transition: opacity 0.4s ease;
-}
-
-.heart-1 { top: -20px; left: -15px; font-size: 38px; transform: rotate(-15deg); }
-.heart-2 { bottom: -25px; right: -15px; font-size: 45px; transform: rotate(10deg); animation-delay: 0.5s; }
-.heart-3 { top: 35%; right: -30px; font-size: 28px; transform: rotate(25deg); animation-delay: 1s; }
-.heart-4 { bottom: 15%; left: -25px; font-size: 24px; transform: rotate(-20deg); animation-delay: 1.5s; }
-
-@keyframes pulse {
-    0% { transform: scale(1) rotate(inherit); }
-    100% { transform: scale(1.1) rotate(inherit); }
-}
-
-.theme-0 h2 { color: #ff2d55; }
-.theme-1 h2 { color: #007aff; }
-.theme-2 h2 { color: #ff9500; }
-.theme-3 h2 { color: #af52de; }
-.theme-4 h2 { color: #34c759; }
-.theme-5 h2 { color: #ff3b30; }
-.theme-6 h2 { color: #5ac8fa; }
-.theme-7 h2 { color: #e5c07b; }
-
-.exploding-heart {
-    position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 2000;
-    font-size: 20px;
-    user-select: none;
-    will-change: transform, opacity;
-    animation: heart-explosion 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
-@keyframes heart-explosion {
-    0% {
-        transform: translate(var(--x), var(--y)) scale(0) rotate(0deg);
-        opacity: 1;
-    }
-    15% {
-        opacity: 1;
-        transform: translate(var(--x), var(--y)) scale(1.2) rotate(var(--r));
-    }
-    100% {
-        transform: translate(calc(var(--x) + var(--dx)), calc(var(--y) + var(--dy))) scale(var(--s)) rotate(calc(var(--r) * 2));
-        opacity: 0;
-    }
+/* Portal Type Integration */
+#modal-overlay.is-portal .modal-svg-wrapper {
+    width: 95vw;
+    height: 90vh;
+    max-width: 1200px;
+    transition: width 0.8s var(--spring-bouncy), height 0.8s var(--spring-bouncy), transform 0.8s var(--spring-bouncy);
+}
+
+#modal-overlay.is-portal .flower-glass-bg,
+#modal-overlay.is-portal #flower-snake {
+    display: none;
+}
+
+#modal-overlay.is-portal #modal-body {
+    width: 100%;
+    height: 100%;
+    padding: 10px; 
+}
+
+.portal-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    background: rgba(15, 15, 35, 0.4);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.portal-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: transparent;
+}
+
+#modal-overlay.is-portal .close-btn {
+    top: calc(var(--safe-top) + 10px);
+    right: 20px;
+    background: rgba(0,0,0,0.3);
+}
+
+.constellation-line {
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 0.8;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.6));
 }
