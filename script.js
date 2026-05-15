@@ -90,11 +90,11 @@ async function initConstellation() {
     } catch (e) {
         console.warn("Using fallback data for constellation.");
         starsData = [
-            { id: 1, type: "memory", text: "Давай просто будем так гулять и больше ничего.", image: "just_us.jpg", x: 75, y: 8, name: "Iota Cancri" },
-            { id: 2, type: "breathing", text: "Я всегда рядом, даже когда кажется, что я далеко ", x: 78, y: 25, name: "Delta Cancri" },
-            { id: 3, type: "voice", text: "Послушай эту песню, она для тебя.", audio: "4_my_girl_hq.mp4", x: 92, y: 45, name: "Alpha Cancri" },
-            { id: 4, type: "portal", text: "Відкрий нашу банку спогадів", url: "jar/index.html", x: 32, y: 28, name: "Zeta Cancri" },
-            { id: 5, type: "placeholder", text: "", x: 18, y: 55, name: "Beta Cancri" }
+            { id: 1, type: "memory", text: "Давай просто будем так гулять и больше ничего.", image: "just_us.jpg", x: 75, y: 16, name: "Iota Cancri" },
+            { id: 2, type: "breathing", text: "Я всегда рядом, даже когда кажется, что я далеко ", x: 78, y: 33, name: "Delta Cancri" },
+            { id: 3, type: "voice", text: "Послушай эту песню, она для тебя.", audio: "4_my_girl_hq.mp4", x: 92, y: 53, name: "Alpha Cancri" },
+            { id: 4, type: "portal", text: "Відкрий нашу банку спогадів", url: "jar/index.html", x: 32, y: 36, name: "Zeta Cancri" },
+            { id: 5, type: "placeholder", text: "", x: 18, y: 63, name: "Beta Cancri" }
         ];
     }
     
